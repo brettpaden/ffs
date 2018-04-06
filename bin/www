@@ -1,0 +1,33 @@
+#!/usr/bin/env node
+
+"use strict"
+
+const app = require('../app');
+const debug = require('debug')('ffs:server');
+const http = require('http');
+const mysql = require('mysql');
+
+const port = normalizePort(process.env.PORT || '3000');
+app.set('port', port);
+
+const server = http.createServer(app);
+server.listen(port);
+//server.on('error', onError);
+server.on('listening', on_listening);
+
+function normalizePort(val) {
+	var port = parseInt(val, 10);
+	if (isNaN(port)) {
+		return val;
+	}
+	if (port >= 0) {
+		return port;
+	}
+	return false;
+}
+
+function on_listening() {
+	var addr = server.address();
+	var bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port;
+	debug('Listening on ' + bind);
+}
